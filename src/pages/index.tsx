@@ -23,15 +23,35 @@ export default function Home() {
   const { data, error } = useSWR('/api/products', fetcher);
   const [filteredItems, setFilteredItems] = useState<Product[]>([])
   const searchRef = useRef<HTMLInputElement>(null);
+  const sortingCriteriaRef = useRef<HTMLSelectElement>(null);
   
   const searchItems = async () => {
-    if(searchRef.current) {
+    if(searchRef.current && searchRef.current.value!=="") {
       const searchValue = searchRef.current.value.trim();
       const _filteredItems = await data.products
             .filter((item: Product) => item.name.toLowerCase().includes(searchValue.toLowerCase()))
       setFilteredItems(_filteredItems);
     }
-    else setFilteredItems(data.products)
+    else if(sortingCriteriaRef!.current!.value==="All")
+      setFilteredItems(data.products)
+    else
+      sortItemsBy()
+  }
+  
+  const sortItemsBy = async () => {
+    switch(sortingCriteriaRef!.current!.value)
+    {
+      case "asc":
+        const itemsByLowest = data.products.toSorted((a: Product, b: Product) => b.price - a.price);
+        setFilteredItems(itemsByLowest);
+        break
+      case "desc":
+        const itemsByHight = data.products.toSorted((a: Product, b: Product) => a.price - b.price);
+        setFilteredItems(itemsByHight);
+        break
+      default:
+        setFilteredItems(data.products)
+    }
   }
   
   return (
@@ -41,7 +61,7 @@ export default function Home() {
       <header className="">
         <h1 className="text-lg font-bold">Fetch store.</h1>
       </header>
-      <main className="flex flex-col w-full h-full">
+      <main className="flex flex-col w-full min-h-screen">
         <div className="flex mb-20">
           <input 
             className="w-full gap-52 pl-2 bg-transparent border-[0.1px] focus:outline-none"
@@ -50,7 +70,10 @@ export default function Home() {
             ref={searchRef}
             onChange={searchItems}
             />
-            <select name="price-filter" className="bg-transparent ml-5 focus:outline-none">
+            <select name="price-filter" 
+                    className="bg-transparent ml-5 focus:outline-none"
+                    onChange={sortItemsBy}
+                    ref={sortingCriteriaRef}>
             <option value="">All</option>
             <option value="desc">Lowest Price</option>
             <option value="asc">Highest Price</option>
@@ -62,11 +85,11 @@ export default function Home() {
               <Card {...product} />
             ))
             ):
-            <p className="col-span-3 text-sm text-center">Nothing to show here...</p>
+            <p className="col-span-3 row-span-3 text-sm text-center">Nothing to see here...</p>
           }
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+      <footer className="clear-start row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
