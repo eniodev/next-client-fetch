@@ -20,10 +20,16 @@ const geistMono = localFont({
 
 
 export default function Home() {
-  const { data, error } = useSWR('/api/products', fetcher);
-  const [filteredItems, setFilteredItems] = useState<Product[]>([])
+  const { data, isLoading, error } = useSWR('/api/products', fetcher);
   const searchRef = useRef<HTMLInputElement>(null);
   const sortingCriteriaRef = useRef<HTMLSelectElement>(null);
+  const [filteredItems, setFilteredItems] = useState<Product[]>([])
+  
+  useEffect(() => {
+    if (data) {
+      setFilteredItems(data.products); // Inicializa a lista com os dados do SWR
+    }
+  }, [data]);
   
   const searchItems = async () => {
     if(searchRef.current && searchRef.current.value!=="") {
@@ -85,15 +91,16 @@ export default function Home() {
               <Card {...product} />
             ))
             ):
-            <p className="col-span-3 row-span-3 text-sm text-center">Nothing to see here...</p>
+            <p className="col-span-3 row-span-3 text-sm text-center">
+              { isLoading ? "Loading..." : "Nothing to see here.." }
+            </p>
           }
         </div>
       </main>
       <footer className="clear-start row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
+          href="/"
           rel="noopener noreferrer"
         >
           <Image
