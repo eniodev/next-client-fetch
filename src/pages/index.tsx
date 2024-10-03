@@ -5,7 +5,7 @@ import { Product } from "@/product";
 import { Card } from "./components/Card";
 import { useEffect, useRef, useState } from "react";
 
-const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
+const fetcher = (...args: any) => fetch(args).then((res) => res.json());
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,7 +18,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-
 export default function Home() {
   const { data, isLoading, error } = useSWR('/api/products', fetcher);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -27,7 +26,7 @@ export default function Home() {
   
   useEffect(() => {
     if (data) {
-      setFilteredItems(data.products); // Inicializa a lista com os dados do SWR
+      setFilteredItems(data.products);
     }
   }, [data]);
   
