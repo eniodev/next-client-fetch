@@ -2,7 +2,7 @@ import Image from "next/image";
 import localFont from "next/font/local";
 import useSWR from 'swr'
 import { Product } from "@/product";
-import { Card } from "./components/Card";
+import { Card, ThemeSwitch }  from "./components";
 import { useEffect, useRef, useState } from "react";
 
 const fetcher = (...args: any) => fetch(args).then((res) => res.json());
@@ -63,8 +63,10 @@ export default function Home() {
     <div
       className={`${geistSans.variable} ${geistMono.variable} flex flex-col items-start justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
     >
-      <header className="">
+      <header className="w-full flex justify-between">
         <h1 className="text-lg font-bold">Fetch store.</h1>
+      
+      <ThemeSwitch />
       </header>
       <main className="flex flex-col w-full min-h-screen">
         <div className="flex mb-20">
@@ -79,9 +81,9 @@ export default function Home() {
                     className="bg-transparent ml-5 focus:outline-none"
                     onChange={sortItemsBy}
                     ref={sortingCriteriaRef}>
-            <option value="">All</option>
-            <option value="desc">Lowest Price</option>
-            <option value="asc">Highest Price</option>
+              <option value="">All</option>
+              <option value="desc">Lowest Price</option>
+              <option value="asc">Highest Price</option>
             </select>
         </div>
         <div className="grid grid-cols-3 gap-8 row-start-2 items-center sm:items-start">

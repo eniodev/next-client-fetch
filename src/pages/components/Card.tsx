@@ -1,6 +1,6 @@
 import type { Product } from "@/product"
 
-export const Card = (product:  Product) => {
+const Card = (product:  Product) => {
   return (
     <div>
       <img src={product.image} alt={product.url} />
@@ -12,3 +12,5 @@ export const Card = (product:  Product) => {
     </div>
   )
 }
+
+export default Card;
