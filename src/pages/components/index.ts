@@ -1,7 +1,9 @@
 import Card  from "./Card";
-import ThemeSwitch from "./ThemeSwitch";
+import ThemeSwitch from "./theme-switch";
+import Layout from "./Layout"
 
 export {
   Card,
-  ThemeSwitch
+  ThemeSwitch,
+  Layout
 }

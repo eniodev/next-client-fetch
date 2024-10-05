@@ -1,28 +1,16 @@
-import Image from "next/image";
-import localFont from "next/font/local";
 import useSWR from 'swr'
 import { Product } from "@/product";
-import { Card, ThemeSwitch }  from "./components";
+import { Card }  from "./components";
 import { useEffect, useRef, useState } from "react";
 
 const fetcher = (...args: any) => fetch(args).then((res) => res.json());
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-
 export default function Home() {
-  const { data, isLoading, error } = useSWR('/api/products', fetcher);
   const searchRef = useRef<HTMLInputElement>(null);
   const sortingCriteriaRef = useRef<HTMLSelectElement>(null);
   const [filteredItems, setFilteredItems] = useState<Product[]>([])
+  
+  const { data, isLoading, error } = useSWR('/api/products', fetcher);
   
   useEffect(() => {
     if (data) {
@@ -60,15 +48,7 @@ export default function Home() {
   }
   
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} flex flex-col items-start justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <header className="w-full flex justify-between">
-        <h1 className="text-lg font-bold">Fetch store.</h1>
-      
-      <ThemeSwitch />
-      </header>
-      <main className="flex flex-col w-full min-h-screen">
+      <>
         <div className="flex mb-20">
           <input 
             className="w-full gap-52 pl-2 bg-transparent border-[0.1px] focus:outline-none"
@@ -97,51 +77,6 @@ export default function Home() {
             </p>
           }
         </div>
-      </main>
-      <footer className="clear-start row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="/"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          WIP
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="/"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="/"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Next →
-        </a>
-      </footer>
-    </div>
+      </>
   );
 }
