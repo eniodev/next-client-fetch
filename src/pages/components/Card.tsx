@@ -1,5 +1,5 @@
 'use client'
-import type { Product } from "@/product"
+import type { Product } from "@/product";
 import Image from "next/image";
 
 const mockImage = 'https://fujifilm-x.b-cdn.net/wp-content/uploads/2023/08/x-t4_thum.jpg?width=480&height=480';

@@ -14,7 +14,7 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-type Props = { children: React.ReactNode }
+type Props = { children: React.ReactNode };
 
 const Layout = ({ children }: Props) => {
   return (

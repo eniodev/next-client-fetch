@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR from 'swr';
 import { Product } from "@/product";
 import { Card }  from "./components";
 import { useEffect, useRef, useState } from "react";
@@ -8,7 +8,7 @@ const fetcher = (...args: any) => fetch(args).then((res) => res.json());
 export default function Home() {
   const searchRef = useRef<HTMLInputElement>(null);
   const sortingCriteriaRef = useRef<HTMLSelectElement>(null);
-  const [filteredItems, setFilteredItems] = useState<Product[]>([])
+  const [filteredItems, setFilteredItems] = useState<Product[]>([]);
   
   const { data, isLoading, error } = useSWR('/api/products', fetcher);
   
@@ -18,15 +18,19 @@ export default function Home() {
     }
   }, [data]);
   
+  const handleFeedback = () => {
+    if (error) return "Could not fetch products";
+    if (searchRef?.current?.value) return "Nothing to see here...";
+    if (isLoading) return "Loading...";
+  }
+  
   const searchItems = async () => {
-    if(searchRef.current && searchRef.current.value!=="") {
+    if(searchRef?.current?.value) {
       const searchValue = searchRef.current.value.trim();
       const _filteredItems = await data.products
-            .filter((item: Product) => item.name.toLowerCase().includes(searchValue.toLowerCase()))
+        .filter((item: Product) => item.name.toLowerCase().includes(searchValue.toLowerCase()));
       setFilteredItems(_filteredItems);
     }
-    else if(sortingCriteriaRef!.current!.value==="All")
-      setFilteredItems(data.products)
     else
       sortItemsBy()
   }
@@ -43,7 +47,7 @@ export default function Home() {
         setFilteredItems(itemsByHight);
         break
       default:
-        setFilteredItems(data.products)
+        setFilteredItems(data.products);
     }
   }
   
@@ -73,10 +77,12 @@ export default function Home() {
             ))
             ):
             <p className="col-span-3 row-span-3 text-sm text-center">
-              { isLoading ? "Loading..." : "Nothing to see here.." }
+              { handleFeedback() }
             </p>
           }
         </div>
       </>
   );
 }
+
+
