@@ -14,7 +14,7 @@ const ThemeSwitch = () => {
   }
 
   return (
-    <select className="text-sm" 
+    <select className="text-sm focus:outline-none" 
             value={theme} 
             onChange={e => setTheme(e.target.value)}>
       <option value="system">System</option>
